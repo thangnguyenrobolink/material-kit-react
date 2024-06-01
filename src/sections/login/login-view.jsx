@@ -1,4 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -20,6 +22,8 @@ import { bgGradient } from 'src/theme/css';
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
 
+import { LoginApi } from 'src/sections/login/UserService';
+
 // ----------------------------------------------------------------------
 
 export default function LoginView() {
@@ -28,19 +32,46 @@ export default function LoginView() {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const handleClick = async (event) => {
+    event.preventDefault();
+    if (!email || !password) {
+      toast.error("Email or password cannot be empty");
+      return;
+    }
 
-  const handleClick = () => {
-    router.push('/dashboard');
+    try {
+      const token = await LoginApi(email, password);
+      if (token) {
+        // Redirect to the dashboard page
+        toast.success('Login successful!', { autoClose: 500 });
+        router.push('/');
+      } else {
+        toast.error('Invalid email or password', {autoClose: 500});
+      }
+    } catch (error) {
+      console.error('An error occurred during login:', error);
+      toast.error('An error occurred during login. Please try again.',error,{ autoClose: 500 });
+    }
   };
+    
+
 
   const renderForm = (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField 
+          name="email" 
+          label="Email address" value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
         <TextField
           name="password"
           label="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
