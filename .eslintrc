@@ -7,7 +7,8 @@
   "plugins": [
     "perfectionist",
     "unused-imports",
-    "prettier"
+    "prettier",
+    "import"
   ],
   "extends": [
     "airbnb",
@@ -44,7 +45,7 @@
   
   "rules": {
     "import/no-extraneous-dependencies": ["error", {
-      "devDependencies": true,
+      "devDependencies": false,
       "optionalDependencies": false,
       "peerDependencies": false,
       "packageDir": "./"

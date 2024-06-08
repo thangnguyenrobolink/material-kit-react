@@ -10,27 +10,25 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { usersFromApi } from 'src/sections/login/UserService';
-// import { users } from 'src/_mock/user';
-
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 import TableNoData from '../table-no-data';
-import UserTableRow from '../user-table-row';
-import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
-import UserTableToolbar from '../user-table-toolbar';
+import ProductTableRow from '../product-table-row';
+import ProductTableHead from '../product-table-head';
+import { productsFromApi } from '../product-services';
+import ProductTableToolbar from '../product-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function ADMProductView() {
 
   const [users2, setUsers2] = useState([]);
   useEffect(() => {
     async function fetchUsers() {
-      const users = await usersFromApi();
+      const users = await productsFromApi();
       setUsers2(users);
     }
     fetchUsers();
@@ -116,7 +114,7 @@ export default function UserPage() {
       </Stack>
 
       <Card>
-        <UserTableToolbar
+        <ProductTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
@@ -125,7 +123,7 @@ export default function UserPage() {
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
+              <ProductTableHead
                 order={order}
                 orderBy={orderBy}
                 rowCount={users2.length}
@@ -133,11 +131,12 @@ export default function UserPage() {
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'code', label: 'Code' },
+                  { id: 'description', label: 'FullName' },
+                  { id: 'packweight', label: 'Pack Weight' },
+                  { id: 'market', label: 'Market'},
+                  { id: 'type', label: 'Type' },
+                  { id: 'exp', label: 'Exp' },
                   { id: '' },
                 ]}
               />
@@ -145,16 +144,16 @@ export default function UserPage() {
                 {dataFiltered
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
-                    <UserTableRow
+                    <ProductTableRow
                       key={row.id}
-                      name={row.name}
-                      role={row.role}
-                      status={row.status}
-                      company={row.company}
-                      avatarUrl={row.avatarUrl}
-                      isVerified={row.isVerified}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      code={row.code}
+                      description={row.description}
+                      packweight={row.packweight}
+                      market={row.market}
+                      type={row.type}
+                      exp={row.exp}
+                      selected={selected.indexOf(row.code) !== -1}
+                      handleClick={(event) => handleClick(event, row.code)}
                     />
                   ))}
 

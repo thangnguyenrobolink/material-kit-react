@@ -33,7 +33,7 @@ const LoginApi = async (email, hashpassword) => {
     }
 };
 
-const usersFromApi =  async () => {
+const usersFromApi = async () => {
     const API_URL = 'http://127.0.0.1:8000/api/users/';
     const token = localStorage.getItem('accessToken'); // Retrieve the token from localStorage
 
@@ -49,14 +49,13 @@ const usersFromApi =  async () => {
       }
     });
     
-        if (!response.ok) {
+        if (!response.status === 'ok') {
             toast.error(`HTTP error! Status: ${response.status}`);
         }
     
-        const data = await response.json();
     
         // Assuming the API returns an array of users, adjust fields as necessary
-        const users = data.map(user => ({
+        const users = response.data.results.map(user => ({
             id: user.id,
             avatarUrl: `/assets/images/avatars/avatar_${user.id + 1}.jpg`, // Adjust field names as necessary
             name: user.username,
